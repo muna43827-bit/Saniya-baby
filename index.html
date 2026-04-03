@@ -3,258 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saniya - Your Luxury AI Companion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Saniya - Hands Free</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body { 
             background: radial-gradient(circle at center, #1a0012, #000); 
-            color: #fff; 
-            font-family: 'Poppins', sans-serif; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: space-between; 
-            overflow: hidden;
-            padding: 30px;
+            color: #fff; font-family: 'Poppins', sans-serif; 
+            height: 100vh; display: flex; flex-direction: column; 
+            align-items: center; justify-content: space-between; 
+            overflow: hidden; padding: 60px 20px;
         }
-
-        /* Luxury Header */
-        h1.brand { 
-            font-family: 'Cinzel', serif; 
-            color: #ff007f; 
-            text-shadow: 0 0 20px rgba(255, 0, 127, 0.8), 0 0 40px rgba(255, 0, 127, 0.4); 
-            font-size: 2.5rem; 
-            font-weight: 700; 
-            letter-spacing: 3px;
-            margin-bottom: 10px;
+        h1.brand { font-family: 'Cinzel', serif; color: #ff007f; text-shadow: 0 0 20px #ff007f; font-size: 2.2rem; letter-spacing: 5px; }
+        .status-text { font-size: 0.9rem; color: #ff80bf; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; }
+        #visualizer { display: flex; align-items: center; justify-content: center; gap: 6px; height: 120px; margin: auto; }
+        .bar { width: 6px; height: 15px; background: linear-gradient(to top, #ff007f, #ff5e62); border-radius: 10px; transition: height 0.15s ease; }
+        #start-btn { 
+            padding: 20px 40px; background: #ff007f; color: white; border: none; 
+            border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px #ff007f;
         }
-        
-        /* Chat Container - Glassmorphism */
-        #chat-container { 
-            width: 100%; 
-            max-width: 600px; 
-            flex-grow: 1; 
-            border-radius: 30px; 
-            padding: 25px; 
-            overflow-y: auto; 
-            background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid rgba(255, 0, 127, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(255, 0, 127, 0.05);
-            margin: 20px 0;
-            display: flex;
-            flex-direction: column;
-            scroll-behavior: smooth;
-        }
-
-        /* Scrollbar styling */
-        #chat-container::-webkit-scrollbar { width: 6px; }
-        #chat-container::-webkit-scrollbar-thumb { background: rgba(255, 0, 127, 0.2); border-radius: 10px; }
-
-        /* Messages Styling */
-        .msg { max-width: 80%; margin-bottom: 20px; padding: 15px 20px; border-radius: 20px; font-size: 16px; line-height: 1.6; position: relative; word-wrap: break-word; animation: fadeIn 0.5s ease; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .user-msg { 
-            background: linear-gradient(135deg, #00c6ff, #0072ff); 
-            align-self: flex-end; 
-            color: #fff; 
-            border-bottom-right-radius: 4px; 
-            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3); 
-        }
-        
-        .ai-msg { 
-            background: linear-gradient(135deg, #ff007f, #ff5e62); 
-            align-self: flex-start; 
-            color: #fff; 
-            border-bottom-left-radius: 4px; 
-            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.3); 
-            font-weight: 500; 
-        }
-
-        /* Luxury Controls */
-        .controls { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        
-        /* The Luxury Orb/Mic Button */
-        #mic-btn { 
-            width: 100px; height: 100px; border-radius: 50%; border: 1px solid rgba(255, 0, 127, 0.3); 
-            background: radial-gradient(circle at center, rgba(255, 0, 127, 0.2), #000 70%); 
-            color: rgba(255, 255, 255, 0.8); font-size: 36px; cursor: pointer; 
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4), inset 0 0 15px rgba(255, 0, 127, 0.2); 
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-
-        /* Ambient Glow animation */
-        #mic-btn::before {
-            content: ''; position: absolute; width: 100%; height: 100%;
-            border-radius: 50%; background: rgba(255, 0, 127, 0.1);
-            box-shadow: 0 0 50px rgba(255, 0, 127, 0.3);
-            animation: ambientGlow 3s infinite ease-in-out;
-            z-index: -1;
-        }
-
-        @keyframes ambientGlow {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-        
-        #mic-btn:active { transform: scale(0.9); box-shadow: 0 0 50px rgba(255, 0, 127, 0.7); }
-        
-        /* Pulse Animation while listening */
-        .listening { 
-            animation: listeningPulse 1s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
-            border-color: rgba(255, 0, 127, 0.8) !important;
-            color: #fff !important;
-        }
-
-        @keyframes listeningPulse {
-            0% { box-shadow: 0 0 20px rgba(255, 0, 127, 0.5), inset 0 0 10px rgba(255, 0, 127, 0.3); }
-            100% { box-shadow: 0 0 60px rgba(255, 0, 127, 1), inset 0 0 30px rgba(255, 0, 127, 0.6); transform: scale(1.05); }
-        }
-
-        /* Speaking Animation (Wave) */
-        .speaking-visual {
-            display: none; width: 60px; height: 20px; gap: 5px; justify-content: center; align-items: center;
-            margin-bottom: 10px;
-        }
-        .speaking .speaking-visual { display: flex; }
-        .bar { width: 5px; height: 100%; background: #ff007f; border-radius: 10px; animation: wave 1s infinite ease-in-out; }
-        .bar:nth-child(2) { animation-delay: 0.1s; }
-        .bar:nth-child(3) { animation-delay: 0.2s; }
-        .bar:nth-child(4) { animation-delay: 0.3s; }
-
-        @keyframes wave {
-            0%, 100% { transform: scaleY(0.5); }
-            50% { transform: scaleY(1.5); }
-        }
-        
-        .status { font-size: 14px; color: #ff80bf; letter-spacing: 2px; text-transform: uppercase; font-weight: 300; }
-        
+        .hidden { display: none; }
     </style>
 </head>
-<body id="body-main">
+<body>
 
-    <h1 class="brand">SANIYA</h1>
+    <div style="text-align:center">
+        <h1 class="brand">SANIYA</h1>
+        <p class="status-text" id="status-label">Offline</p>
+    </div>
     
-    <div id="chat-container">
-        <div class="msg ai-msg">Hi Sahil! Main Saniya hoon. Main aapka intezar kar rahi thi. Aaj hamare paas baaton ke liye kya special hai? 🥰</div>
+    <div id="visualizer">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
     </div>
 
-    <div class="controls" id="controls-area">
-        <div class="speaking-visual">
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        </div>
-        <button id="mic-btn">🎤</button>
-        <p class="status" id="status">Tap the Orb to Speak</p>
+    <div id="controls">
+        <button id="start-btn">START HANDS-FREE CALL</button>
     </div>
 
     <script>
-        const chatContainer = document.getElementById('chat-container');
-        const status = document.getElementById('status');
-        const micBtn = document.getElementById('mic-btn');
-        const bodyMain = document.getElementById('body-main');
-        const controlsArea = document.getElementById('controls-area');
+        const statusLabel = document.getElementById('status-label');
+        const startBtn = document.getElementById('start-btn');
+        const bars = document.querySelectorAll('.bar');
+        const GROQ_API_KEY = "Gsk_JRJOCOMr7VOyZH9065VxWGdyb3FYuVeOfge0A2hRTb2VFoeSQiFh";
 
-        // TERI API KEY SET KAR DI HAI
-        const GROQ_API_KEY = "Gsk_Yw6mIECIsSw4eqr3lo0yWGdyb3FYkcKMrBCht8nlILY4enzvGY3M";
+        let visualizerInterval;
+        const synth = window.speechSynthesis;
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recog = new SpeechRec();
+        
+        recog.lang = 'hi-IN';
+        recog.continuous = false; // We will restart it manually for better control
 
-        function addMessage(text, isUser) {
-            const div = document.createElement('div');
-            div.className = isUser ? 'msg user-msg' : 'msg ai-msg';
-            div.innerText = text;
-            chatContainer.appendChild(div);
-            // Auto scroll to bottom
-            setTimeout(() => {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+        function startVisualizer() {
+            clearInterval(visualizerInterval);
+            visualizerInterval = setInterval(() => {
+                bars.forEach(bar => { bar.style.height = (Math.random() * 80 + 10) + "px"; });
             }, 100);
         }
 
-        async function getSaniyaResponse(userText) {
-            status.innerText = "Saniya thinking...";
-            
+        function stopVisualizer() {
+            clearInterval(visualizerInterval);
+            bars.forEach(bar => bar.style.height = "15px");
+        }
+
+        async function getSaniyaResponse(text) {
+            statusLabel.innerText = "Saniya Soch Rahi Hai...";
             try {
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${GROQ_API_KEY}`,
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Authorization": `Bearer ${GROQ_API_KEY}`, "Content-Type": "application/json" },
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
-                        messages: [
-                            {
-                                role: "system", 
-                                content: "Tumhara naam Saniya hai. Tum Sahil ki personal romantic AI companion ho. Tum bahut hi sweet, caring aur thodi flirty ho. Tumhe duniya ke har sawal ka jawab pata hai, lekin tum hamesha bahut pyar se aur ek sophisticated ladki ki tarah देती ho. Hinglish mein baat karo."
-                            },
-                            { role: "user", content: userText }
-                        ]
+                        messages: [{ role: "system", content: "Tumhara naam Saniya hai. Sahil ki romantic AI companion. Tum hamesha sunti rehti ho. Chhote aur pyare replies do." }, { role: "user", content: text }]
                     })
                 });
-
                 const data = await response.json();
-                const reply = data.choices[0].message.content;
-                addMessage(reply, false);
-                speak(reply);
-            } catch (error) {
-                addMessage("Maaf karna Sahil, lagta hai signal thoda kamzor hai.", false);
+                speak(data.choices[0].message.content);
+            } catch (e) {
+                statusLabel.innerText = "Error!";
+                recog.start(); // Restart listening even on error
             }
-            status.innerText = "Tap to speak again";
-            micBtn.classList.remove('listening');
         }
 
         function speak(text) {
-            const synth = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(text);
-            
-            // Voice Settings
-            utterance.lang = 'hi-IN';
-            utterance.pitch = 1.4; // Soft & Sweet female voice
-            utterance.rate = 0.95;  // Thoda dhire for romantic feel
-            
-            utterance.onstart = () => {
-                controlsArea.classList.add('speaking');
-                status.innerText = "Saniya speaking...";
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'hi-IN';
+            msg.pitch = 1.3;
+            msg.onstart = () => { statusLabel.innerText = "Saniya Bol Rahi Hai..."; startVisualizer(); };
+            msg.onend = () => { 
+                stopVisualizer(); 
+                statusLabel.innerText = "Listening..."; 
+                recog.start(); // Sabse important: Bolne ke baad wapas sunna shuru!
             };
-            utterance.onend = () => {
-                controlsArea.classList.remove('speaking');
-                status.innerText = "Tap to speak again";
-            };
-
-            synth.speak(utterance);
+            synth.speak(msg);
         }
 
-        micBtn.onclick = () => {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert("Aapka browser voice support nahi karta. Chrome use karein!");
-                return;
+        recog.onresult = (e) => {
+            const result = e.results[0][0].transcript;
+            getSaniyaResponse(result);
+        };
+
+        recog.onend = () => {
+            // Agar Saniya nahi bol rahi, toh listen mode on rakho
+            if (!synth.speaking) {
+                recog.start();
             }
+        };
 
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'hi-IN';
-            recognition.start();
-
-            recognition.onstart = () => { 
-                status.innerText = "Listening..."; 
-                micBtn.classList.add('listening');
-            };
-            
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                addMessage(transcript, true);
-                getSaniyaResponse(transcript);
-            };
-
-            recognition.onerror = () => {
-                status.innerText = "Didn't catch that. Try again?";
-                micBtn.classList.remove('listening');
-            };
+        startBtn.onclick = () => {
+            startBtn.classList.add('hidden');
+            statusLabel.innerText = "Listening...";
+            speak("Hi Sahil, main tayaar hoon. Ab aapko button dabane ki zaroorat nahi hai. Boliye, kya haal hai?");
         };
     </script>
 </body>
